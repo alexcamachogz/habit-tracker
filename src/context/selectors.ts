@@ -1,4 +1,4 @@
-import { useApp } from './AppContext';
+import { useApp } from './AuthAppContext';
 
 // Selectores útiles separados para Fast Refresh
 export const useHabits = () => {

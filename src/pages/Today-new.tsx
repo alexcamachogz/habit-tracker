@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { CheckCircle, Circle, PartyPopper } from "lucide-react";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "@/context/AuthAppContext";
 import { IconRenderer } from "@/components/ui/icon-renderer";
 import { isHabitActiveToday, formatDate } from "@/lib/habitUtils";
 
 const Today: React.FC = () => {
-  const { state, dispatch } = useApp();
+  const { state, markHabitComplete } = useApp();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const today = new Date();
   const todayStr = formatDate(today);
@@ -28,42 +28,11 @@ const Today: React.FC = () => {
     setIsLoading(habitId);
     
     try {
-      // Simular delay de API
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
       const habit = state.habits.find(h => h.id === habitId);
       if (!habit) return;
       
-      const existingLog = habit.logs[todayStr];
-
-      if (existingLog) {
-        // Actualizar log existente
-        dispatch({
-          type: 'UPDATE_LOG',
-          payload: {
-            habitId,
-            date: todayStr,
-            updates: {
-              completed: !existingLog.completed
-            }
-          }
-        });
-      } else {
-        // Crear nuevo log
-        const newLog = {
-          date: todayStr,
-          completed: true,
-          markedLate: false,
-          timestamp: new Date()
-        };
-        dispatch({
-          type: 'ADD_LOG',
-          payload: {
-            habitId,
-            log: newLog
-          }
-        });
-      }
+      const currentlyCompleted = isCompleted(habitId);
+      await markHabitComplete(habitId, todayStr, !currentlyCompleted);
     } finally {
       setIsLoading(null);
     }

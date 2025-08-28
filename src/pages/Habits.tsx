@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Calendar, BarChart3, Tag, FileText, Trash2 } from "lucide-react";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "@/context/AuthAppContext";
 import { IconRenderer } from "@/components/ui/icon-renderer";
 import { getHabitStats } from "@/lib/habitUtils";
 import HabitModal from "@/components/HabitModal";
 import type { Habit } from "@/types/habit";
 
 const Habits: React.FC = () => {
-  const { state, dispatch } = useApp();
+  const { state, deleteHabit: deleteHabitService, createHabit: createHabitService } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string>('todas');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -45,14 +45,14 @@ const Habits: React.FC = () => {
     }
   };
 
-  const deleteHabit = (habitId: string) => {
+  const deleteHabit = async (habitId: string) => {
     if (confirm('¿Estás seguro de que quieres eliminar este hábito?')) {
-      dispatch({ type: 'DELETE_HABIT', payload: habitId });
+      await deleteHabitService(habitId);
     }
   };
 
   // Función para crear nuevo hábito
-  const createHabit = (habitData: {
+  const createHabit = async (habitData: {
     name: string;
     description: string;
     category: string;
@@ -60,9 +60,10 @@ const Habits: React.FC = () => {
     targetDays: number[];
     targetFrequency: string;
   }) => {
-    const newHabit: Habit = {
-      id: Date.now().toString(),
-      userId: 'user1',
+    if (!state.user) return;
+    
+    const newHabit: Omit<Habit, 'id'> = {
+      userId: state.user.id,
       name: habitData.name,
       description: habitData.description,
       category: habitData.category as 'skincare' | 'gym' | 'alimentacion' | 'lectura' | 'otros',
@@ -76,7 +77,7 @@ const Habits: React.FC = () => {
       logs: {}
     };
 
-    dispatch({ type: 'ADD_HABIT', payload: newHabit });
+    await createHabitService(newHabit);
   };
 
   return (

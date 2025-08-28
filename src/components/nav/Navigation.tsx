@@ -1,9 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Calendar, Home, Target, BarChart3, CheckSquare } from "lucide-react";
+import { Calendar, Home, Target, BarChart3, CheckSquare, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useApp } from "@/context/AuthAppContext";
 
 const Navigation: React.FC = () => {
+  const { state, signOut } = useApp();
+
   const navItems = [
     {
       path: "/",
@@ -58,6 +61,20 @@ const Navigation: React.FC = () => {
                 </NavLink>
               );
             })}
+          </div>
+          
+          {/* User section */}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <User className="w-4 h-4" />
+              <span>{state.user?.name}</span>
+            </div>
+            <button
+              onClick={signOut}
+              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+            </button>
           </div>
         </div>
       </div>

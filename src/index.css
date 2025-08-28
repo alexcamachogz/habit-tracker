@@ -42,6 +42,8 @@ h1 {
   line-height: 1.1;
 }
 
+/* Estilos de botón globales comentados para evitar interferencia con Tailwind */
+/*
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -60,6 +62,7 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+*/
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -69,7 +72,10 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
+  /* Botón global comentado para usar solo Tailwind */
+  /*
   button {
     background-color: #f9f9f9;
   }
+  */
 }

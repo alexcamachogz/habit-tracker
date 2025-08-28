@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { CheckCircle, Circle, PartyPopper } from "lucide-react";
-import { useApp } from "@/context/AppContext";
+import { useApp } from "@/context/AuthAppContext";
 import { IconRenderer } from "@/components/ui/icon-renderer";
 import { isHabitActiveToday, formatDate } from "@/lib/habitUtils";
-import type { Habit, HabitLog } from "@/types/habit";
+import type { Habit } from "@/types/habit";
 
 const Today: React.FC = () => {
-  const { state, dispatch } = useApp();
+  const { state, markHabitComplete } = useApp();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const today = new Date();
   const todayStr = formatDate(today);
@@ -27,42 +27,16 @@ const Today: React.FC = () => {
     setIsLoading(habitId);
     
     try {
-      // Simular delay de API
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
       const habit = state.habits.find(h => h.id === habitId);
       if (!habit) return;
       
       const existingLog = habit.logs[todayStr];
-
-      if (existingLog) {
-        // Actualizar log existente
-        dispatch({
-          type: 'UPDATE_LOG',
-          payload: {
-            habitId,
-            date: todayStr,
-            updates: {
-              completed: !existingLog.completed
-            }
-          }
-        });
-      } else {
-        // Crear nuevo log
-        const newLog: HabitLog = {
-          date: todayStr,
-          completed: true,
-          markedLate: false,
-          timestamp: new Date()
-        };
-        dispatch({
-          type: 'ADD_LOG',
-          payload: {
-            habitId,
-            log: newLog
-          }
-        });
-      }
+      const newCompletedState = existingLog ? !existingLog.completed : true;
+      
+      // Usar el servicio real de Firebase
+      await markHabitComplete(habitId, todayStr, newCompletedState);
+    } catch (error) {
+      console.error('Error al marcar hábito:', error);
     } finally {
       setIsLoading(null);
     }
