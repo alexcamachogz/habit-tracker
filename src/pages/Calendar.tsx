@@ -94,8 +94,8 @@ const CalendarPage: React.FC = () => {
         {/* Calendario */}
         <div className="grid grid-cols-7 gap-1">
           {/* Días de la semana */}
-          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(day => (
-            <div key={day} className="text-center text-sm font-medium text-gray-500 p-2">
+          {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((day, index) => (
+            <div key={`weekday-${index}`} className="text-center text-sm font-medium text-gray-500 p-2">
               {day}
             </div>
           ))}

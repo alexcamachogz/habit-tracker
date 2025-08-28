@@ -148,18 +148,32 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       if (firebaseUser) {
         dispatch({ type: 'SET_LOADING', payload: true });
         try {
-          // Obtener datos completos del usuario
-          const userData = await AuthService.getCurrentUser(firebaseUser.uid);
-          if (userData) {
-            dispatch({ type: 'SET_USER', payload: userData });
-            
-            // Cargar hábitos del usuario
-            const habits = await HabitService.getUserHabits(firebaseUser.uid);
-            dispatch({ type: 'SET_HABITS', payload: habits });
+          // Verificar que el usuario esté completamente autenticado antes de acceder a Firestore
+          if (firebaseUser.email && firebaseUser.uid) {
+            // Obtener datos completos del usuario
+            const userData = await AuthService.getCurrentUser(firebaseUser.uid);
+            if (userData) {
+              dispatch({ type: 'SET_USER', payload: userData });
+              
+              // Cargar hábitos del usuario
+              const habits = await HabitService.getUserHabits(firebaseUser.uid);
+              dispatch({ type: 'SET_HABITS', payload: habits });
+            } else {
+              // Si no hay datos en Firestore, crear usuario con datos de Firebase Auth
+              const newUserData: User = {
+                id: firebaseUser.uid,
+                name: firebaseUser.displayName || 'Usuario',
+                email: firebaseUser.email,
+                createdAt: new Date()
+              };
+              await AuthService.createOrUpdateUser(newUserData);
+              dispatch({ type: 'SET_USER', payload: newUserData });
+              dispatch({ type: 'SET_HABITS', payload: [] });
+            }
           }
         } catch (error) {
           console.error('Error al cargar datos del usuario:', error);
-          dispatch({ type: 'SET_ERROR', payload: 'Error al cargar datos del usuario' });
+          dispatch({ type: 'SET_ERROR', payload: 'Error al cargar datos del usuario. Revisa la configuración de Firebase.' });
         } finally {
           dispatch({ type: 'SET_LOADING', payload: false });
         }

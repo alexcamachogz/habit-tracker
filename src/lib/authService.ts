@@ -82,9 +82,17 @@ export class AuthService {
   }
 
   // Obtener usuario actual de Firestore
-  static async getCurrentUser(uid: string): Promise<User | null> {
+  static async getCurrentUser(uid?: string): Promise<User | null> {
     try {
-      const userRef = doc(db, 'users', uid);
+      // Si no hay uid, usar el usuario actual de Auth
+      const currentUser = uid ? null : auth.currentUser;
+      const userId = uid || currentUser?.uid;
+      
+      if (!userId) {
+        return null;
+      }
+
+      const userRef = doc(db, 'users', userId);
       const userDoc = await getDoc(userRef);
       
       if (userDoc.exists()) {
@@ -93,12 +101,45 @@ export class AuthService {
           id: userDoc.id,
           name: data.name,
           email: data.email,
-          createdAt: data.createdAt.toDate()
+          createdAt: data.createdAt?.toDate() || new Date()
         };
       }
+      
+      // Si no existe en Firestore, crear desde el usuario de Auth
+      if (currentUser || auth.currentUser) {
+        const firebaseUser = currentUser || auth.currentUser!;
+        const userData: User = {
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || 'Usuario',
+          email: firebaseUser.email || '',
+          createdAt: new Date()
+        };
+        
+        // Intentar crear el usuario en Firestore, pero no fallar si no se puede
+        try {
+          await this.createOrUpdateUser(userData);
+        } catch (createError) {
+          console.warn('No se pudo crear usuario en Firestore, usando datos de Auth:', createError);
+        }
+        
+        return userData;
+      }
+      
       return null;
     } catch (error) {
-      console.error('Error al obtener usuario:', error);
+      console.error('Error al obtener usuario de Firestore:', error);
+      
+      // Fallback: usar datos de Firebase Auth si está disponible
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        return {
+          id: currentUser.uid,
+          name: currentUser.displayName || 'Usuario',
+          email: currentUser.email || '',
+          createdAt: new Date()
+        };
+      }
+      
       return null;
     }
   }

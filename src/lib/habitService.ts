@@ -15,33 +15,35 @@ import { db } from './firebase';
 import type { Habit, HabitLog, HabitDetails } from '@/types/habit';
 
 export class HabitService {
-  // Obtener todos los hábitos de un usuario
+    // Obtener todos los hábitos del usuario
   static async getUserHabits(userId: string): Promise<Habit[]> {
     try {
       const habitsRef = collection(db, 'habits');
-      const q = query(
-        habitsRef, 
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
-      );
-      
+      const q = query(habitsRef, where('userId', '==', userId));
       const querySnapshot = await getDocs(q);
-      const habits: Habit[] = [];
       
+      const habits: Habit[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         habits.push({
-          ...data,
           id: doc.id,
-          createdAt: data.createdAt.toDate(),
+          name: data.name,
+          description: data.description,
+          category: data.category,
+          icon: data.icon,
+          frequency: data.frequency,
+          trackingType: data.trackingType || 'boolean', // Default para retrocompatibilidad
+          userId: data.userId,
+          createdAt: data.createdAt?.toDate() || new Date(),
           logs: data.logs || {}
-        } as Habit);
+        });
       });
       
       return habits;
     } catch (error) {
       console.error('Error al obtener hábitos:', error);
-      throw error;
+      // Retornar array vacío en lugar de fallar
+      return [];
     }
   }
 
