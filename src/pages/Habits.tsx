@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Calendar, BarChart3, Tag, FileText, Trash2 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
+import { IconRenderer } from "@/components/ui/icon-renderer";
 import { getHabitStats } from "@/lib/habitUtils";
 import type { Habit } from "@/types/habit";
 
@@ -71,7 +73,7 @@ const Habits: React.FC = () => {
       <div className="space-y-4">
         {filteredHabits.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
-            <div className="text-4xl mb-3">📝</div>
+            <FileText className="w-12 h-12 mx-auto mb-3 text-gray-400" />
             <h3 className="text-lg font-semibold text-gray-700 mb-2">No hay hábitos en esta categoría</h3>
             <p className="text-gray-500 mb-4">Crea tu primer hábito para comenzar a seguir tu progreso.</p>
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
@@ -86,25 +88,28 @@ const Habits: React.FC = () => {
               <div key={habit.id} className="bg-white rounded-lg shadow p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4">
-                    <span className="text-3xl">{habit.icon}</span>
+                    <IconRenderer iconName={habit.icon} className="w-8 h-8 mt-1" />
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">{habit.name}</h3>
                       {habit.description && (
                         <p className="text-gray-600 mt-1">{habit.description}</p>
                       )}
                       <div className="mt-2 space-y-1">
-                        <div className="text-sm text-gray-500">
-                          📅 {getFrequencyText(habit)}
+                        <div className="text-sm text-gray-500 flex items-center space-x-1">
+                          <Calendar className="w-4 h-4" />
+                          <span>{getFrequencyText(habit)}</span>
                         </div>
-                        <div className="text-sm text-gray-500">
-                          🏷️ {habit.category === 'skincare' ? 'Cuidado Personal' :
+                        <div className="text-sm text-gray-500 flex items-center space-x-1">
+                          <Tag className="w-4 h-4" />
+                          <span>{habit.category === 'skincare' ? 'Cuidado Personal' :
                                habit.category === 'gym' ? 'Ejercicio' :
                                habit.category === 'alimentacion' ? 'Alimentación' :
                                habit.category === 'lectura' ? 'Lectura' :
-                               'Otros'}
+                               'Otros'}</span>
                         </div>
-                        <div className="text-sm text-gray-500">
-                          📊 {habit.trackingType === 'simple' ? 'Seguimiento simple' : 'Seguimiento detallado'}
+                        <div className="text-sm text-gray-500 flex items-center space-x-1">
+                          <BarChart3 className="w-4 h-4" />
+                          <span>{habit.trackingType === 'simple' ? 'Seguimiento simple' : 'Seguimiento detallado'}</span>
                         </div>
                       </div>
                     </div>
@@ -119,7 +124,7 @@ const Habits: React.FC = () => {
                         onClick={() => deleteHabit(habit.id)}
                         className="p-2 bg-white hover:bg-red-100 rounded-lg transition-colors text-red-600 border border-gray-200"
                       >
-                        🗑️
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

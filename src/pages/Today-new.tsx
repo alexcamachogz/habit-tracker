@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { CheckCircle, Circle, PartyPopper } from "lucide-react";
 import { useApp } from "@/context/AppContext";
+import { IconRenderer } from "@/components/ui/icon-renderer";
 import { isHabitActiveToday, formatDate } from "@/lib/habitUtils";
 
 const Today: React.FC = () => {
@@ -105,7 +107,7 @@ const Today: React.FC = () => {
       <div className="space-y-3">
         {activeTodayHabits.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-6 text-center">
-            <div className="text-4xl mb-2">🎉</div>
+            <PartyPopper className="w-12 h-12 mx-auto mb-2 text-gray-400" />
             <h3 className="text-lg font-semibold text-gray-700">¡No hay hábitos programados para hoy!</h3>
             <p className="text-gray-500">Disfruta tu día libre o crea nuevos hábitos.</p>
           </div>
@@ -135,10 +137,12 @@ const Today: React.FC = () => {
                       {loading ? (
                         <div className="w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin" />
                       ) : completed ? (
-                        '✓'
-                      ) : null}
+                        <CheckCircle className="w-4 h-4 text-white" />
+                      ) : (
+                        <Circle className="w-4 h-4 text-white" />
+                      )}
                     </button>
-                    <span className="text-xl">{habit.icon}</span>
+                    <IconRenderer iconName={habit.icon} className="w-5 h-5" />
                     <div>
                       <h3 className={`font-semibold ${completed ? 'text-green-700 line-through' : 'text-gray-900'}`}>
                         {habit.name}
@@ -164,7 +168,7 @@ const Today: React.FC = () => {
       {/* Resumen rápido */}
       {completedCount === activeTodayHabits.length && activeTodayHabits.length > 0 && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-          <div className="text-2xl mb-2">🎉</div>
+          <PartyPopper className="w-8 h-8 mx-auto mb-2 text-green-600" />
           <h3 className="text-lg font-semibold text-green-800">¡Todos los hábitos completados!</h3>
           <p className="text-green-700">Has terminado con éxito tu rutina de hoy.</p>
         </div>

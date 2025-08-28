@@ -1,5 +1,7 @@
 import React from "react";
+import { CheckCircle, Flame, FileText } from "lucide-react";
 import { useHabits } from "@/context/selectors";
+import { IconRenderer } from "@/components/ui/icon-renderer";
 import { getHabitStats, getWeeklyProgress, getWeekStart, formatDate } from "@/lib/habitUtils";
 
 const WeeklySummary: React.FC = () => {
@@ -36,7 +38,7 @@ const WeeklySummary: React.FC = () => {
               <div key={index} className={`p-2 rounded ${isToday ? 'bg-blue-100 border-2 border-blue-500' : ''}`}>
                 <div className="text-xs text-gray-500">{day}</div>
                 <div className="text-sm font-medium">{date.getDate()}</div>
-                {isPast && <div className="text-xs">✅</div>}
+                {isPast && <CheckCircle className="w-3 h-3 text-green-600" />}
               </div>
             );
           })}
@@ -50,7 +52,7 @@ const WeeklySummary: React.FC = () => {
           {weeklyProgress.map(habit => (
             <div key={habit.id} className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <span className="text-xl">{habit.icon}</span>
+                <IconRenderer iconName={habit.icon} className="w-5 h-5" />
                 <span className="font-medium">{habit.name}</span>
               </div>
               <div className="flex items-center space-x-4">
@@ -71,14 +73,17 @@ const WeeklySummary: React.FC = () => {
 
       {/* Rachas principales */}
       <div className="bg-white rounded-lg shadow p-4">
-        <h2 className="text-lg font-semibold mb-3">🔥 Rachas Actuales</h2>
+        <h2 className="text-lg font-semibold mb-3 flex items-center space-x-2">
+          <Flame className="w-5 h-5 text-orange-500" />
+          <span>Rachas Actuales</span>
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {weeklyProgress
             .filter(habit => habit.currentStreak > 0)
             .map(habit => (
               <div key={habit.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center space-x-2">
-                  <span className="text-lg">{habit.icon}</span>
+                  <IconRenderer iconName={habit.icon} className="w-5 h-5" />
                   <span className="font-medium">{habit.name}</span>
                 </div>
                 <span className="text-lg font-bold text-orange-600">
@@ -92,8 +97,9 @@ const WeeklySummary: React.FC = () => {
 
       {/* CTA Principal */}
       <div className="text-center">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-          📝 Marcar hábitos de hoy
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center space-x-2 mx-auto">
+          <FileText className="w-5 h-5" />
+          <span>Marcar hábitos de hoy</span>
         </button>
       </div>
     </div>

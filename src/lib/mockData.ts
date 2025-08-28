@@ -13,7 +13,7 @@ export const mockHabits: Habit[] = [
     id: 'habit1',
     userId: 'user1',
     name: 'Ejercicio en el Gym',
-    icon: '🏋️',
+    icon: 'Dumbbell',
     frequency: {
       type: 'weekly',
       days: [1, 3, 5], // Lunes, Miércoles, Viernes
@@ -43,7 +43,7 @@ export const mockHabits: Habit[] = [
     id: 'habit2',
     userId: 'user1',
     name: 'Rutina de Skincare',
-    icon: '🧴',
+    icon: 'Sparkles',
     frequency: {
       type: 'daily',
     },
@@ -79,7 +79,7 @@ export const mockHabits: Habit[] = [
     id: 'habit3',
     userId: 'user1',
     name: 'Lectura',
-    icon: '📚',
+    icon: 'BookOpen',
     frequency: {
       type: 'daily',
     },
@@ -108,7 +108,7 @@ export const mockHabits: Habit[] = [
     id: 'habit4',
     userId: 'user1',
     name: 'Plan de Alimentación',
-    icon: '🥗',
+    icon: 'Salad',
     frequency: {
       type: 'weekly',
       days: [1, 2, 3, 4, 5], // Lunes a Viernes

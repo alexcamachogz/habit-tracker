@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Calendar as CalendarIcon, CheckCircle, XCircle } from "lucide-react";
 import { useHabits } from "@/context/selectors";
+import { IconRenderer } from "@/components/ui/icon-renderer";
 import { formatDate } from "@/lib/habitUtils";
 
 const CalendarPage: React.FC = () => {
@@ -147,7 +149,7 @@ const CalendarPage: React.FC = () => {
         
         {dayLogs.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            <div className="text-4xl mb-2">📅</div>
+            <CalendarIcon className="w-12 h-12 mx-auto mb-2 text-gray-400" />
             <p>Sin actividad registrada este día</p>
           </div>
         ) : (
@@ -172,7 +174,11 @@ const CalendarPage: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <span className={`text-2xl ${log?.completed ? '✅' : '❌'}`} />
+                  {log?.completed ? (
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  ) : (
+                    <XCircle className="w-6 h-6 text-red-600" />
+                  )}
                   <span className="text-xs text-gray-500">
                     {log?.timestamp.toLocaleTimeString('es-ES', { 
                       hour: '2-digit', 
@@ -201,7 +207,7 @@ const CalendarPage: React.FC = () => {
             
             return (
               <div key={habit.id} className="text-center">
-                <div className="text-2xl mb-1">{habit.icon}</div>
+                <IconRenderer iconName={habit.icon} className="w-8 h-8 mx-auto mb-1" />
                 <div className="text-sm font-medium">{habit.name}</div>
                 <div className="text-xs text-gray-500">{completedInMonth} días</div>
               </div>

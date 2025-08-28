@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Lightbulb, Flame, AlertTriangle, Trophy } from "lucide-react";
 import { useHabits } from "@/context/selectors";
+import { IconRenderer } from "@/components/ui/icon-renderer";
 import { getHabitStats, getWeeklyProgress, getMonthlyProgress, getWeekStart, formatDate } from "@/lib/habitUtils";
 
 const Progress: React.FC = () => {
@@ -175,7 +177,7 @@ const Progress: React.FC = () => {
               <div key={habit.id} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{habit.icon}</span>
+                    <IconRenderer iconName={habit.icon} className="w-6 h-6" />
                     <div>
                       <h4 className="font-semibold">{habit.name}</h4>
                       <p className="text-sm text-gray-500">{habit.category}</p>
@@ -222,7 +224,10 @@ const Progress: React.FC = () => {
 
       {/* Insights y recomendaciones */}
       <div className="bg-white rounded-lg shadow p-4">
-        <h3 className="text-lg font-semibold mb-4">💡 Insights</h3>
+        <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2">
+          <Lightbulb className="w-5 h-5 text-yellow-500" />
+          <span>Insights</span>
+        </h3>
         <div className="space-y-3">
           {/* Mejor hábito */}
           {habits.length > 0 && (() => {
@@ -231,7 +236,7 @@ const Progress: React.FC = () => {
             );
             return (
               <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
-                <span className="text-2xl">🏆</span>
+                <Trophy className="w-8 h-8 text-green-500" />
                 <div>
                   <div className="font-medium text-green-800">Tu mejor hábito</div>
                   <div className="text-sm text-green-700">
@@ -249,7 +254,7 @@ const Progress: React.FC = () => {
             );
             return (
               <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
-                <span className="text-2xl">⚠️</span>
+                <AlertTriangle className="w-8 h-8 text-yellow-500" />
                 <div>
                   <div className="font-medium text-yellow-800">Necesita atención</div>
                   <div className="text-sm text-yellow-700">
@@ -267,7 +272,7 @@ const Progress: React.FC = () => {
             );
             return (
               <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg">
-                <span className="text-2xl">🔥</span>
+                <Flame className="w-8 h-8 text-orange-500" />
                 <div>
                   <div className="font-medium text-orange-800">Récord personal</div>
                   <div className="text-sm text-orange-700">
