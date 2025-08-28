@@ -3,11 +3,13 @@ import { Calendar, BarChart3, Tag, FileText, Trash2 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { IconRenderer } from "@/components/ui/icon-renderer";
 import { getHabitStats } from "@/lib/habitUtils";
+import HabitModal from "@/components/HabitModal";
 import type { Habit } from "@/types/habit";
 
 const Habits: React.FC = () => {
   const { state, dispatch } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string>('todas');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Filtrar hábitos por categoría
   const filteredHabits = selectedCategory === 'todas' 
@@ -16,6 +18,20 @@ const Habits: React.FC = () => {
 
   // Obtener categorías únicas
   const categories = ['todas', ...Array.from(new Set(state.habits.map(habit => habit.category)))];
+
+  // Función para obtener el nombre de display de una categoría
+  const getCategoryDisplayName = (category: string) => {
+    switch (category) {
+      case 'todas': return 'Todas';
+      case 'skincare': return 'Skin Care';
+      case 'gym': return 'Ejercicio';
+      case 'alimentacion': return 'Alimentación';
+      case 'lectura': return 'Lectura';
+      default: 
+        // Para categorías personalizadas, capitalizar la primera letra
+        return category.charAt(0).toUpperCase() + category.slice(1);
+    }
+  };
 
   const getFrequencyText = (habit: Habit) => {
     if (habit.frequency.type === 'daily') {
@@ -35,11 +51,42 @@ const Habits: React.FC = () => {
     }
   };
 
+  // Función para crear nuevo hábito
+  const createHabit = (habitData: {
+    name: string;
+    description: string;
+    category: string;
+    icon: string;
+    targetDays: number[];
+    targetFrequency: string;
+  }) => {
+    const newHabit: Habit = {
+      id: Date.now().toString(),
+      userId: 'user1',
+      name: habitData.name,
+      description: habitData.description,
+      category: habitData.category as 'skincare' | 'gym' | 'alimentacion' | 'lectura' | 'otros',
+      icon: habitData.icon,
+      frequency: { 
+        type: 'weekly', 
+        days: habitData.targetDays 
+      },
+      trackingType: 'simple',
+      createdAt: new Date(),
+      logs: {}
+    };
+
+    dispatch({ type: 'ADD_HABIT', payload: newHabit });
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Mis Hábitos</h1>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+        >
           + Nuevo Hábito
         </button>
       </div>
@@ -58,12 +105,7 @@ const Habits: React.FC = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {category === 'todas' ? 'Todas' : 
-               category === 'skincare' ? 'Cuidado Personal' :
-               category === 'gym' ? 'Ejercicio' :
-               category === 'alimentacion' ? 'Alimentación' :
-               category === 'lectura' ? 'Lectura' :
-               'Otros'}
+              {getCategoryDisplayName(category)}
             </button>
           ))}
         </div>
@@ -101,11 +143,7 @@ const Habits: React.FC = () => {
                         </div>
                         <div className="text-sm text-gray-500 flex items-center space-x-1">
                           <Tag className="w-4 h-4" />
-                          <span>{habit.category === 'skincare' ? 'Cuidado Personal' :
-                               habit.category === 'gym' ? 'Ejercicio' :
-                               habit.category === 'alimentacion' ? 'Alimentación' :
-                               habit.category === 'lectura' ? 'Lectura' :
-                               'Otros'}</span>
+                          <span>{getCategoryDisplayName(habit.category)}</span>
                         </div>
                         <div className="text-sm text-gray-500 flex items-center space-x-1">
                           <BarChart3 className="w-4 h-4" />
@@ -197,6 +235,13 @@ const Habits: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal para crear nuevo hábito */}
+      <HabitModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={createHabit}
+      />
     </div>
   );
 };

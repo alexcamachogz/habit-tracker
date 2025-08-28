@@ -113,9 +113,9 @@ const CalendarPage: React.FC = () => {
                 key={index}
                 onClick={() => setSelectedDate(day)}
                 className={`
-                  p-2 text-sm rounded-lg transition-all relative bg-white border border-transparent
-                  ${!isCurrentMonth ? 'text-gray-400' : 'text-gray-900'}
-                  ${isToday && isCurrentMonth ? 'bg-blue-50 border-2 border-blue-300 font-bold text-blue-900' : ''}
+                  p-2 text-sm rounded-lg transition-all relative border border-transparent
+                  ${!isCurrentMonth ? 'text-gray-400 bg-white' : 'text-gray-900'}
+                  ${isToday && isCurrentMonth ? '!bg-blue-100 border-2 border-blue-400 font-bold text-blue-900' : 'bg-white'}
                   ${isSelected && !isToday ? 'bg-gray-200 border-2 border-gray-400 text-gray-900' : ''}
                   ${!isSelected && !isToday && isCurrentMonth ? 'hover:bg-gray-50' : ''}
                   ${!isCurrentMonth ? 'hover:bg-gray-50' : ''}
@@ -162,7 +162,7 @@ const CalendarPage: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <span className="text-xl">{icon}</span>
+                  <IconRenderer iconName={icon} className="w-5 h-5" />
                   <div>
                     <h4 className={`font-medium ${log?.completed ? 'text-green-800' : 'text-red-800'}`}>
                       {name}

@@ -1,11 +1,13 @@
 import React from "react";
 import { CheckCircle, Flame, FileText } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 import { useHabits } from "@/context/selectors";
 import { IconRenderer } from "@/components/ui/icon-renderer";
 import { getHabitStats, getWeeklyProgress, getWeekStart, formatDate } from "@/lib/habitUtils";
 
 const WeeklySummary: React.FC = () => {
   const habits = useHabits();
+  const navigate = useNavigate();
   const today = new Date();
   const weekStart = getWeekStart(today);
 
@@ -97,7 +99,10 @@ const WeeklySummary: React.FC = () => {
 
       {/* CTA Principal */}
       <div className="text-center">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center space-x-2 mx-auto">
+        <button 
+          onClick={() => navigate('/today')}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center space-x-2 mx-auto"
+        >
           <FileText className="w-5 h-5" />
           <span>Marcar hábitos de hoy</span>
         </button>
