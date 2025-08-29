@@ -1,127 +1,157 @@
-# Habit Tracker 📊
+# Habit Tracker
 
-Una aplicación moderna para el seguimiento de hábitos construida con React, TypeScript, Vite y Firebase.
+A modern, intuitive habit tracking application built with React, TypeScript, and Tailwind CSS. Track your daily habits, monitor progress, and build consistent routines with a clean, user-friendly interface.
 
-## 🚀 Características
+## Features
 
-- ✅ **Autenticación con Google** - Login seguro con Firebase Auth
-- 📱 **Responsive Design** - Optimizada para móvil y desktop
-- 📊 **Seguimiento de Progreso** - Estadísticas y visualizaciones
-- 🗓️ **Vista de Calendario** - Seguimiento visual por fechas
-- 🔥 **Rachas y Métricas** - Motivación con estadísticas de progreso
-- 💾 **Persistencia en la Nube** - Datos sincronizados con Firestore
+### 🎯 Habit Management
+- Create custom habits with different frequencies (daily, weekly, custom)
+- Track detailed information for each habit completion
+- Organize habits by categories (gym, skincare, reading, nutrition, others)
+- Set habit descriptions and custom icons
 
-## 🛠️ Stack Tecnológico
+### 📊 Progress Tracking
+- Real-time progress visualization for daily completion rates
+- Track completion streaks and success rates
+- Detailed logging system with timestamps and late marking
+- Visual feedback with progress bars and completion indicators
 
-- **Frontend**: React 18 + TypeScript + Vite
-- **Styling**: Tailwind CSS + Radix UI
-- **Backend**: Firebase (Auth + Firestore)
-- **Icons**: Lucide React
-- **Routing**: React Router DOM
+### 📱 User Interface
+- Clean, modern design with intuitive navigation
+- Responsive layout that works on all devices
+- Icon-based habit identification with Lucide React icons
+- Real-time loading states and smooth animations
 
-## 📦 Instalación
+### 📈 Analytics & Insights
+- Daily progress overview with completion percentages
+- Weekly and monthly progress tracking
+- Habit statistics including streaks and success rates
+- Visual celebration of completed daily routines
 
+## Tech Stack
+
+- **Frontend:** React 18 with TypeScript
+- **Styling:** Tailwind CSS
+- **Icons:** Lucide React
+- **Build Tool:** Vite
+- **State Management:** React Context with useReducer
+- **Development:** ESLint for code quality
+
+## Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── nav/            # Navigation components
+│   └── ui/             # UI components (icon renderer, etc.)
+├── context/            # React Context for state management
+├── layouts/            # Page layout components
+├── lib/                # Utility functions and helpers
+│   ├── habitUtils.ts   # Habit-related utility functions
+│   └── mockData.ts     # Sample data for development
+├── pages/              # Page components
+├── types/              # TypeScript type definitions
+│   └── habit.ts        # Habit-related type definitions
+└── App.tsx             # Main application component
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
 ```bash
-# Clona el repositorio
 git clone <repository-url>
 cd habit-tracker
-
-# Instala dependencias
-npm install
-
-# Configura Firebase (ver sección Firebase)
-cp .env.example .env
-# Edita .env con tus credenciales de Firebase
 ```
 
-## 🔥 Configuración de Firebase
-
-### Prerrequisitos
-
-1. Cuenta de Google/Firebase
-2. Proyecto creado en [Firebase Console](https://console.firebase.google.com/)
-
-### Pasos de configuración:
-
-1. **Ve a Firebase Console** y selecciona tu proyecto `habit-tracker-a9c01`
-
-2. **Habilita Authentication:**
-
-   - Authentication > Sign-in method
-   - Activa **Google** como proveedor
-   - Agrega `localhost` a dominios autorizados
-
-3. **Crea Firestore Database:**
-
-   - Firestore Database > Create database
-   - Modo: "Start in test mode"
-   - Ubicación: us-central1
-
-4. **Configura las reglas de Firestore:**
-
-   ```javascript
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /users/{userId} {
-         allow read, write: if request.auth != null && request.auth.uid == userId;
-       }
-       match /habits/{habitId} {
-         allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-         allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
-       }
-     }
-   }
-   ```
-
-5. **Actualiza el archivo .env** con tus credenciales
-
-### Verificación:
-
-Ver [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md) para detalles completos
-
-## 🚀 Desarrollo
-
+2. Install dependencies:
 ```bash
-# Servidor de desarrollo
-npm run dev
-
-# Build para producción
-npm run build
-
-# Preview del build
-npm run preview
+npm install
 ```
 
-## 📱 Funcionalidades
+3. Start the development server:
+```bash
+npm run dev
+```
 
-### Páginas:
+4. Open your browser and navigate to `http://localhost:5173`
 
-- **Resumen**: Vista semanal
-- **Hoy**: Marcado de hábitos
-- **Calendario**: Vista mensual
-- **Hábitos**: Gestión CRUD
-- **Progreso**: Estadísticas
+### Available Scripts
 
-## 🎯 Estado del Proyecto
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint for code quality
 
-### ✅ Completado:
+## Data Models
 
-- [x] Proyecto base (React + TypeScript + Vite)
-- [x] Firebase Auth + Firestore
-- [x] UI responsive y navegación móvil
-- [x] Gestión de estado con Context API
-- [x] Todas las páginas principales
-- [x] Manejo de errores y loading
-- [x] Layout full width optimizado
+### Habit
+- **id**: Unique identifier
+- **name**: Habit display name
+- **icon**: Lucide icon name or emoji
+- **frequency**: Daily, weekly, or custom frequency settings
+- **category**: Organization category
+- **trackingType**: Simple or detailed tracking
+- **logs**: Record of completions with timestamps
 
-### 🔄 Pendiente:
+### Habit Log
+- **date**: Completion date (YYYY-MM-DD)
+- **completed**: Boolean completion status
+- **details**: Category-specific tracking data
+- **markedLate**: Whether completion was marked after the target date
+- **timestamp**: When the log was created
 
-- [ ] **Firebase Console setup** (Authentication + Firestore rules)
-- [ ] Testing completo
-- [ ] Deploy
+## Features in Detail
 
-## 📚 Docs
+### Frequency Types
+- **Daily**: Habit should be completed every day
+- **Weekly**: Habit should be completed on specific days of the week
+- **Custom**: Custom frequency with count and period settings
 
-- [Setup Firebase](./FIREBASE_SETUP.md)
-- [Dev Instructions](./.github/copilot-instructions.md)
+### Tracking Types
+- **Simple**: Basic completion tracking
+- **Detailed**: Enhanced tracking with category-specific details
+  - Gym: Exercise type and duration
+  - Skincare: Morning/evening routine tracking
+  - Reading: Minutes read and pages completed
+  - Nutrition: Meal completion tracking
+
+### Categories
+- **Gym**: Physical exercise and fitness activities
+- **Skincare**: Beauty and self-care routines
+- **Reading**: Book and learning activities
+- **Nutrition**: Diet and meal planning
+- **Others**: General habits and custom activities
+
+## State Management
+
+The app uses React Context with useReducer for state management:
+
+- **AppContext**: Main application state including habits, user data, and UI state
+- **Actions**: Predefined actions for habit CRUD operations and log management
+- **Reducer**: Pure functions handling state updates
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Built with [Vite](https://vitejs.dev/) for fast development
+- Icons provided by [Lucide React](https://lucide.dev/)
+- Styling with [Tailwind CSS](https://tailwindcss.com/)
+- UI components inspired by [shadcn/ui](https://ui.shadcn.com/)
