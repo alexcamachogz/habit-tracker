@@ -192,13 +192,22 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
+      
       const userData = await AuthService.signInWithGoogle();
       if (userData) {
         dispatch({ type: 'SET_USER', payload: userData });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error al iniciar sesión:', error);
-      dispatch({ type: 'SET_ERROR', payload: 'Error al iniciar sesión' });
+      
+      const errorMessage = error instanceof Error ? error.message : 'Error al iniciar sesión';
+      
+      // No mostrar error si el usuario simplemente cerró el popup
+      if (!errorMessage.includes('cerrado por el usuario') && 
+          !errorMessage.includes('cancelada') && 
+          !errorMessage.includes('cancelled')) {
+        dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      }
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }

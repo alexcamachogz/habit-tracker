@@ -9,9 +9,18 @@ import { auth, googleProvider, db } from './firebase';
 import type { User } from '@/types/habit';
 
 export class AuthService {
+  private static pendingSignIn = false;
+
   // Iniciar sesión con Google
   static async signInWithGoogle(): Promise<User | null> {
     try {
+      // Evitar múltiples popups simultáneos
+      if (this.pendingSignIn) {
+        throw new Error('Ya hay una solicitud de inicio de sesión en progreso');
+      }
+      
+      this.pendingSignIn = true;
+      
       // Configurar opciones específicas para el popup
       const result = await signInWithPopup(auth, googleProvider);
       const firebaseUser = result.user;
@@ -28,15 +37,20 @@ export class AuthService {
       return userData;
     } catch (error: unknown) {
       // Manejo específico de errores comunes
-      const firebaseError = error as { code?: string };
+      const firebaseError = error as { code?: string; message?: string };
+      
       if (firebaseError.code === 'auth/popup-closed-by-user') {
         throw new Error('Popup cerrado por el usuario');
       } else if (firebaseError.code === 'auth/popup-blocked') {
         throw new Error('Popup bloqueado por el navegador');
+      } else if (firebaseError.code === 'auth/cancelled-popup-request') {
+        throw new Error('Solicitud de popup cancelada');
       } else {
         console.error('Error al iniciar sesión:', error);
         throw error;
       }
+    } finally {
+      this.pendingSignIn = false;
     }
   }
 
