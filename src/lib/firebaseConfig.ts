@@ -1,7 +1,5 @@
 // Archivo para verificar la configuración de Firebase
 import { auth, db } from './firebase';
-import { connectAuthEmulator } from 'firebase/auth';
-import { connectFirestoreEmulator } from 'firebase/firestore';
 
 export class FirebaseConfig {
   static isConfigured = false;
