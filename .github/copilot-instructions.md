@@ -1,11 +1,11 @@
 - [x] Verificar que el archivo copilot-instructions.md en el directorio .github existe.
 
-- [ ] Aclarar requisitos del proyecto
+- [x] Aclarar requisitos del proyecto
 - [x] Crear el proyecto (React + Vite + TypeScript)
-- [ ] Personalizar el proyecto
-- [ ] Instalar extensiones requeridas
-- [ ] Compilar el proyecto
-- [ ] Crear y ejecutar tarea
+- [x] Personalizar el proyecto
+- [x] Instalar extensiones requeridas
+- [x] Compilar el proyecto
+- [x] Crear y ejecutar tarea
 - [ ] Lanzar el proyecto
 - [ ] Verificar documentación
 
