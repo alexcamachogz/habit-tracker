@@ -37,6 +37,7 @@ cp .env.example .env
 ## 🔥 Configuración de Firebase
 
 ### Prerrequisitos
+
 1. Cuenta de Google/Firebase
 2. Proyecto creado en [Firebase Console](https://console.firebase.google.com/)
 
@@ -45,16 +46,19 @@ cp .env.example .env
 1. **Ve a Firebase Console** y selecciona tu proyecto `habit-tracker-a9c01`
 
 2. **Habilita Authentication:**
+
    - Authentication > Sign-in method
    - Activa **Google** como proveedor
    - Agrega `localhost` a dominios autorizados
 
 3. **Crea Firestore Database:**
+
    - Firestore Database > Create database
-   - Modo: "Start in test mode" 
+   - Modo: "Start in test mode"
    - Ubicación: us-central1
 
 4. **Configura las reglas de Firestore:**
+
    ```javascript
    rules_version = '2';
    service cloud.firestore {
@@ -73,6 +77,7 @@ cp .env.example .env
 5. **Actualiza el archivo .env** con tus credenciales
 
 ### Verificación:
+
 Ver [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md) para detalles completos
 
 ## 🚀 Desarrollo
@@ -81,7 +86,7 @@ Ver [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md) para detalles completos
 # Servidor de desarrollo
 npm run dev
 
-# Build para producción  
+# Build para producción
 npm run build
 
 # Preview del build
@@ -91,6 +96,7 @@ npm run preview
 ## 📱 Funcionalidades
 
 ### Páginas:
+
 - **Resumen**: Vista semanal
 - **Hoy**: Marcado de hábitos
 - **Calendario**: Vista mensual
@@ -100,6 +106,7 @@ npm run preview
 ## 🎯 Estado del Proyecto
 
 ### ✅ Completado:
+
 - [x] Proyecto base (React + TypeScript + Vite)
 - [x] Firebase Auth + Firestore
 - [x] UI responsive y navegación móvil
@@ -109,6 +116,7 @@ npm run preview
 - [x] Layout full width optimizado
 
 ### 🔄 Pendiente:
+
 - [ ] **Firebase Console setup** (Authentication + Firestore rules)
 - [ ] Testing completo
 - [ ] Deploy

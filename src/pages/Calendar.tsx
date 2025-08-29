@@ -180,10 +180,27 @@ const CalendarPage: React.FC = () => {
                     <XCircle className="w-6 h-6 text-red-600" />
                   )}
                   <span className="text-xs text-gray-500">
-                    {log?.timestamp.toLocaleTimeString('es-ES', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}
+                    {(() => {
+                      const timestamp = log?.timestamp;
+                      if (!timestamp) return '';
+                      
+                      try {
+                        // Intentar como Timestamp de Firebase primero
+                        if (typeof timestamp === 'object' && 'toDate' in timestamp) {
+                          return (timestamp as { toDate(): Date }).toDate().toLocaleTimeString('es-ES', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          });
+                        }
+                        // Si no, intentar como Date normal
+                        return new Date(timestamp).toLocaleTimeString('es-ES', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        });
+                      } catch {
+                        return '';
+                      }
+                    })()}
                   </span>
                 </div>
               </div>

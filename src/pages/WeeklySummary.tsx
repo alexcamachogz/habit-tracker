@@ -31,17 +31,35 @@ const WeeklySummary: React.FC = () => {
       <div className="bg-white rounded-lg shadow p-4">
         <h2 className="text-lg font-semibold mb-3">Esta Semana</h2>
         <div className="grid grid-cols-7 gap-2 text-center">
-          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => {
+          {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((day, index) => {
             const date = new Date(weekStart);
             date.setDate(date.getDate() + index);
             const isToday = formatDate(date) === formatDate(today);
-            const isPast = date < today;
+            const dateStr = formatDate(date);
+            
+            // Verificar si se completaron hábitos ese día
+            const dayHabitsCompleted = habits.filter(habit => {
+              const log = habit.logs[dateStr];
+              return log && log.completed;
+            }).length;
+            
+            const totalHabitsForDay = habits.filter(habit => {
+              // Verificar si el hábito aplica para este día según su frecuencia
+              if (habit.frequency.type === 'daily') return true;
+              if (habit.frequency.type === 'weekly' && habit.frequency.days) {
+                const dayOfWeek = date.getDay(); // 0=domingo, 1=lunes...
+                return habit.frequency.days.includes(dayOfWeek);
+              }
+              return false;
+            }).length;
+            
+            const hasCompletedHabits = dayHabitsCompleted > 0 && dayHabitsCompleted === totalHabitsForDay;
             
             return (
               <div key={index} className={`p-2 rounded ${isToday ? 'bg-blue-100 border-2 border-blue-500' : ''}`}>
                 <div className="text-xs text-gray-500">{day}</div>
                 <div className="text-sm font-medium">{date.getDate()}</div>
-                {isPast && <CheckCircle className="w-3 h-3 text-green-600" />}
+                {hasCompletedHabits && <CheckCircle className="w-3 h-3 text-green-600 mx-auto mt-1" />}
               </div>
             );
           })}

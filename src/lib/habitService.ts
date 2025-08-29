@@ -112,10 +112,14 @@ export class HabitService {
       const log: HabitLog = {
         date,
         completed,
-        details,
         markedLate: this.isMarkedLate(date),
         timestamp: new Date()
       };
+
+      // Solo agregar details si no es undefined
+      if (details !== undefined) {
+        log.details = details;
+      }
       
       const updatedLogs = {
         ...currentLogs,
