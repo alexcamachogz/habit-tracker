@@ -23,8 +23,9 @@ const WeeklySummary: React.FC = () => {
   });
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Resumen Semanal</h1>
+    <div className="w-full py-6">
+      <div className="max-w-7xl mx-auto px-6 space-y-6">
+        <h1 className="text-3xl font-bold text-gray-900">Resumen Semanal</h1>
       
       {/* Mini calendario semanal */}
       <div className="bg-white rounded-lg shadow p-4">
@@ -106,6 +107,7 @@ const WeeklySummary: React.FC = () => {
           <FileText className="w-5 h-5" />
           <span>Marcar hábitos de hoy</span>
         </button>
+      </div>
       </div>
     </div>
   );

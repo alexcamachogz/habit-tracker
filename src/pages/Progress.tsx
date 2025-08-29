@@ -55,8 +55,9 @@ const Progress: React.FC = () => {
     : 0;
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Progreso y Estadísticas</h1>
+    <div className="w-full py-6">
+      <div className="max-w-7xl mx-auto px-6 space-y-6">
+        <h1 className="text-3xl font-bold text-gray-900">Progreso y Estadísticas</h1>
 
       {/* Controles de filtro */}
       <div className="bg-white rounded-lg shadow p-4">
@@ -283,6 +284,7 @@ const Progress: React.FC = () => {
             );
           })()}
         </div>
+      </div>
       </div>
     </div>
   );
